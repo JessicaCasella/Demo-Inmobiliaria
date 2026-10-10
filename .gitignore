@@ -3,3 +3,4 @@ site.zip
 .sites-runtime/
 .sites-checkout/
 dist/
+assets/*.png
