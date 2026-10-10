@@ -43,7 +43,7 @@ media.add('(prefers-reduced-motion: no-preference)',()=>{
   align();
   gsap.set(roomCopy,{autoAlpha:0,y:16});gsap.set(services,{autoAlpha:0,y:20});
   gsap.set(leaf,{rotationY:0,transformPerspective:1000});
-  const tl=gsap.timeline({defaults:{ease:'none'},scrollTrigger:{trigger:entrance,pin:panel,start:'top top',end:()=>'+='+Math.round(innerHeight*3.2),scrub:.85,anticipatePin:1,invalidateOnRefresh:true,onRefreshInit:align}});
+  const tl=gsap.timeline({defaults:{ease:'none'},scrollTrigger:{trigger:entrance,start:'top top',end:'bottom bottom',scrub:.85,anticipatePin:1,invalidateOnRefresh:true,onRefreshInit:align}});
   activeTimeline=tl;
   tl.addLabel('door',0)
     .to(leaf,{rotationY:-105,duration:2.5,ease:'power1.inOut'},.3)

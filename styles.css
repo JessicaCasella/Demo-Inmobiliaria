@@ -40,3 +40,4 @@ h1,h2{font-size:clamp(36px,10.5vw,50px);letter-spacing:-1.7px;line-height:1.1;ma
   .animated-walkthrough .entrance-art:after{background:linear-gradient(to bottom,var(--paper),transparent 15%,transparent 77%,var(--paper))}
 }
 @media(max-width:760px) and (max-height:700px){.animated-walkthrough .journey-room-copy{top:86px}}
+.animated-walkthrough .entrance-track{min-height:420svh}.animated-walkthrough .entrance-panel{position:sticky;top:0}.journey-room-copy,.journey-services{grid-area:auto}
