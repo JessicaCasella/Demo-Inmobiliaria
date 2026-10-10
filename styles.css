@@ -5,3 +5,28 @@
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{transition:none!important;animation:none!important}.reading-progress{display:none}}
 @media(max-width:760px){.visual{z-index:2}.scene{background:var(--paper)}}
 @media(min-width:761px){.visual{float:none;margin-bottom:-100svh}}
+.mobile-entrance,.mobile-contact-key{display:none}
+@media(max-width:760px){
+  html{scroll-padding-top:24px}
+  .visual{display:none}
+  .hero{min-height:0;padding-top:30px}
+  .hero .chapter-content{padding-bottom:18px}
+  .hero .scroll-hint{margin-top:24px}
+  .mobile-entrance{display:block;height:180svh;margin:0 -8.14%;position:relative}
+  .entrance-stage{position:sticky;top:0;height:85svh;overflow:hidden;display:flex;align-items:center;justify-content:center;background:var(--paper)}
+  .entrance-stage .illustration{height:auto;width:100%;max-width:600px;flex:none}
+  .entrance-stage .house{transform-origin:300px 380px;will-change:transform}
+  .entrance-veil{position:absolute;inset:0;background:var(--paper);opacity:0;pointer-events:none}
+  .entrance-caption{position:absolute;bottom:8%;left:0;right:0;text-align:center;font-size:11px;letter-spacing:.4px;color:var(--muted)}
+  .chapter:not(.hero){min-height:0;padding-top:45px}
+  .chapter:not(.hero) .chapter-content{padding-bottom:40px}
+  .mobile-contact-key{display:block;width:170px;height:170px;margin:0 0 20px -20px}
+  .mobile-contact-key .illustration{width:170px;height:170px}
+  .mobile-contact-key .house,.mobile-contact-key .plant,.mobile-contact-key .ground-shadow{display:none}
+  .mobile-contact-key .key{opacity:1;transform:none}
+}
+@media(max-width:760px) and (prefers-reduced-motion:reduce){
+  .mobile-entrance{height:auto}
+  .entrance-stage{position:relative;height:45svh}
+  .entrance-caption{display:none}
+}

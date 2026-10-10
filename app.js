@@ -22,6 +22,28 @@
   drawing.forEach(path => { const length = path.getTotalLength(); path.style.strokeDasharray = length; path.dataset.length = length; });
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   const chapters = [...document.querySelectorAll('.chapter')];
+  // The mobile entrance occupies its own scene, then scrolls away completely.
+  const entrance = document.createElement('div');
+  entrance.className = 'mobile-entrance'; entrance.setAttribute('aria-hidden', 'true');
+  const entranceStage = document.createElement('div'); entranceStage.className = 'entrance-stage';
+  function copyIllustration(prefix) {
+    const svg = document.querySelector('.illustration').cloneNode(true);
+    svg.querySelectorAll('[id]').forEach(el => {
+      const old = el.id; el.id = prefix + old;
+      svg.querySelectorAll('*').forEach(node => [...node.attributes].forEach(attr => {
+        if (attr.value.includes('url(#' + old + ')')) node.setAttribute(attr.name, attr.value.replace('url(#' + old + ')', 'url(#' + prefix + old + ')'));
+      }));
+    });
+    return svg;
+  }
+  const entranceSvg = copyIllustration('entrance-');
+  const entranceVeil = document.createElement('div'); entranceVeil.className = 'entrance-veil';
+  const entranceCaption = document.createElement('p'); entranceCaption.className = 'entrance-caption'; entranceCaption.textContent = 'Bajá. La puerta está abierta.';
+  entranceStage.append(entranceSvg, entranceVeil, entranceCaption); entrance.append(entranceStage);
+  chapters[0].after(entrance);
+  const contactKey = document.createElement('div'); contactKey.className = 'mobile-contact-key'; contactKey.setAttribute('aria-hidden', 'true');
+  contactKey.append(copyIllustration('contact-')); chapters[3].querySelector('.chapter-content').prepend(contactKey);
+  const entranceHouse = entranceSvg.querySelector('.house'), entranceDoor = entranceSvg.querySelector('.door');
   const clamp = x => Math.max(0, Math.min(1, x));
   let queued = false;
   function render() {
@@ -43,6 +65,22 @@
     key.style.opacity = finale;
     key.style.transform = reduced.matches ? 'none' : `translateY(${(1-finale)*35}px) rotate(${(1-finale)*-25}deg) scale(${.8 + finale*.2})`;
     caption.textContent = (copy.escenas || [])[Math.min(3, Math.round(phase))] || '';
+    if (mobile) {
+      const bounds = entrance.getBoundingClientRect();
+      const entering = clamp(-bounds.top / Math.max(1, bounds.height - entranceStage.offsetHeight));
+      const open = clamp(entering / .3);
+      const zoom = clamp((entering - .25) / .65);
+      const easedZoom = zoom * zoom;
+      entranceSvg.querySelector('.window-light').style.opacity = 1;
+      entranceSvg.querySelector('.key').style.opacity = 0;
+      entranceSvg.querySelectorAll('.drawing path').forEach(path => { path.style.strokeDashoffset = 0; });
+      entranceDoor.style.transform = reduced.matches ? 'scaleX(.15)' : `skewY(${-open * 12}deg) scaleX(${1 - open * .95})`;
+      entranceHouse.style.opacity = 1;
+      entranceHouse.style.transform = reduced.matches ? 'none' : `scale(${1 + easedZoom * 17})`;
+      entranceVeil.style.opacity = reduced.matches ? 0 : clamp((entering - .75) / .22);
+      entranceCaption.style.opacity = 1 - clamp(entering / .25);
+      entranceSvg.querySelector('.plant').style.opacity = 1 - clamp(zoom * 3);
+    }
     document.documentElement.style.setProperty('--progress', clamp(scrollY / Math.max(1, document.documentElement.scrollHeight - innerHeight)));
   }
   const schedule = () => { if (!queued) { queued = true; requestAnimationFrame(render); } };
