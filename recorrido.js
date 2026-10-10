@@ -13,9 +13,9 @@ function measure(){
 }
 function paint(){
  const g=geometry;
- gsap.set(exterior,{scale:state.scale,x:state.x,y:state.y});
- const left=g.cx-g.pw*state.scale/2+state.x,top=g.cy-g.ph*state.scale/2+state.y;
- const right=left+g.pw*state.scale,bottom=top+g.ph*state.scale;
+ const scale=Number(gsap.getProperty(exterior,'scaleX')),x=Number(gsap.getProperty(exterior,'x')),y=Number(gsap.getProperty(exterior,'y'));
+ const left=g.cx-g.pw*scale/2+x,top=g.cy-g.ph*scale/2+y;
+ const right=left+g.pw*scale,bottom=top+g.ph*scale;
  interior.style.clipPath='inset('+clamp(top,0,g.h)+'px '+clamp(g.w-right,0,g.w)+'px '+clamp(g.h-bottom,0,g.h)+'px '+clamp(left,0,g.w)+'px)';
 }
 if(!window.gsap||!window.ScrollTrigger)return;
@@ -24,19 +24,19 @@ const mm=gsap.matchMedia();
 mm.add('(prefers-reduced-motion: no-preference)',()=>{
  measure();
  const mobile=innerWidth<=760;
- Object.assign(state,{scale:mobile?.72:1,x:mobile?(geometry.w/2-geometry.cx):0,y:mobile?160:0});paint();
+ Object.assign(state,{scale:mobile?.72:1,x:mobile?(geometry.w/2-geometry.cx):0,y:mobile?160:0});gsap.set(exterior,state);paint();
  const initial={...state};
  gsap.set(door,{rotationY:0,transformPerspective:1200});
- const t=gsap.timeline({defaults:{ease:'none'},onUpdate:paint,scrollTrigger:{trigger:'.journey',start:'top top',end:'bottom bottom',scrub:1,invalidateOnRefresh:true,onRefreshInit:measure}});timeline=t;
+ const t=gsap.timeline({defaults:{ease:'none'},onUpdate:paint,scrollTrigger:{trigger:'.journey',start:'top top',end:'bottom bottom',scrub:1,invalidateOnRefresh:true,onRefreshInit:measure,onRefresh:paint}});timeline=t;
  t.addLabel('house',0).to({}, {duration:.8},0)
  .to(hero,{autoAlpha:0,y:-20,duration:1},.8)
- .to(state,{scale:()=>initial.scale*1.8,x:()=>geometry.w/2-geometry.cx,y:()=>geometry.h*.5-geometry.cy,duration:2,ease:'power1.inOut'},.8)
+ .to(exterior,{scale:()=>initial.scale*1.8,x:()=>geometry.w/2-geometry.cx,y:()=>geometry.h*.5-geometry.cy,duration:2,ease:'power1.inOut'},.8)
  .to(entry,{autoAlpha:1,y:0,duration:.8},2)
  .addLabel('door',2.8)
  .to(door,{rotationY:-104,duration:2.5,ease:'power1.inOut'},3.1)
  .to(door,{autoAlpha:0,duration:.5},5.2)
  .to(entry,{autoAlpha:0,y:-14,duration:.8},5.5)
- .to(state,{scale:()=>Math.max(geometry.w/geometry.pw,geometry.h/geometry.ph)*1.03,x:()=>geometry.w/2-geometry.cx,y:()=>geometry.h/2-geometry.cy,duration:3.8,ease:'power1.inOut'},5.7)
+ .to(exterior,{scale:()=>Math.max(geometry.w/geometry.pw,geometry.h/geometry.ph)*1.03,x:()=>geometry.w/2-geometry.cx,y:()=>geometry.h/2-geometry.cy,duration:3.8,ease:'power1.inOut'},5.7)
  .to('.room',{scale:1.03,x:-12,duration:3.8,ease:'power1.inOut'},5.7)
  .to(room,{autoAlpha:1,y:0,duration:1.2},8.8)
  .addLabel('room',10).to({}, {duration:1.5},10)
