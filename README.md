@@ -2,6 +2,8 @@
 
 Web informativa de una sola página, sin catálogo ni buscador, basada en el mockup aprobado. El recorrido conecta cuatro escenas: fachada, entrada, living y entrega de la llave. El scroll acerca la cámara, abre la puerta y revela el interior sin una transición vacía. Respeta la preferencia de movimiento reducido.
 
+La entrada y el living comparten una sola escena y una línea de tiempo de GSAP/ScrollTrigger. El interior se encuentra detrás del marco; la puerta y la cámara se animan juntas. La respuesta al scroll tiene una interpolación de 0,85 segundos y conserva el scroll nativo. Las bibliotecas GSAP 3.13.0 están incluidas en `vendor` para no depender de un CDN al visitar la demo. Con movimiento reducido se muestra el recorrido estático.
+
 ## Cambiar contenido
 
 Editar `textos.js`. El nombre y los textos son ilustrativos. Configurar `email` o `whatsapp` para activar el contacto real. No hay mensajes enviados ni formularios con datos guardados.
